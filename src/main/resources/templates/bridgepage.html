@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bridge Data</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#fetchDataBtn").click(function() {
+                $.get("/api/bridge/data", function(data) {
+                    // Retrieve the first data item from the response
+                    var bridgeData = data[0];
+                    
+                    // Display the data in the text box
+                    $("#bridgeDataTextbox").val(JSON.stringify(bridgeData));
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Bridge Data</h1>
+    <button id="fetchDataBtn">Fetch Data</button>
+    <br>
+    <textarea id="bridgeDataTextbox" rows="10" cols="50"></textarea>
+</body>
+</html>
