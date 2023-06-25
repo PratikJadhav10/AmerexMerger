@@ -49,6 +49,7 @@ public class TFInterface {
 		return ResponseEntity.ok(bridgeData);
 	}
 
+	//This returns whole object related to the id
 	@GetMapping("/{bridgeRequestId}")
 	public RetrieveDataPage getXmlData(@PathVariable Long bridgeRequestId) throws NoSuchBridgeIdException {
 		System.out.println("getXmlData()");
@@ -57,6 +58,7 @@ public class TFInterface {
 
 	}
 
+	//This returns only message load data(xml data) of the particular id
 	@GetMapping("/new/{bridgeRequestId}")
 	public String getXmlData1(@PathVariable Long bridgeRequestId) throws NoSuchBridgeIdException {
 		System.out.println("getXmlData()");
