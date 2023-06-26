@@ -49,16 +49,18 @@ public class TFInterface {
 		return ResponseEntity.ok(bridgeData);
 	}
 
-	//This returns whole object related to the id
+	// This returns whole object related to the id
 	@GetMapping("/{bridgeRequestId}")
 	public RetrieveDataPage getXmlData(@PathVariable Long bridgeRequestId) throws NoSuchBridgeIdException {
 		System.out.println("getXmlData()");
-		return retrieveRepo.findById(bridgeRequestId)
+		RetrieveDataPage retrieveDataPage = retrieveRepo.findById(bridgeRequestId)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + bridgeRequestId));
-
+		return retrieveDataPage;
+		// return retrieveRepo.findById(bridgeRequestId).orElseThrow(() -> new
+		// IllegalArgumentException("Invalid user Id: " + bridgeRequestId));
 	}
 
-	//This returns only message load data(xml data) of the particular id
+	// This returns only message load data(xml data) of the particular id
 	@GetMapping("/new/{bridgeRequestId}")
 	public String getXmlData1(@PathVariable Long bridgeRequestId) throws NoSuchBridgeIdException {
 		System.out.println("getXmlData()");
