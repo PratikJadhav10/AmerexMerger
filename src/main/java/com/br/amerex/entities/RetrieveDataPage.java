@@ -1,5 +1,6 @@
 package com.br.amerex.entities;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -31,6 +32,10 @@ public class RetrieveDataPage {
 	 * @Column(name = "date", nullable = false) private Date trade_date;
 	 */
 
+	private LocalDateTime date;
+
+	private String trade_ref;
+
 	@Column(name = "source_system", nullable = false, length = 10)
 	private String sourceSystem;
 
@@ -50,12 +55,13 @@ public class RetrieveDataPage {
 
 	}
 
-	public RetrieveDataPage(Long bridgeRequestId, int recordVersion, String sourceSystem, String messageLoad,
-			String messageStatus, String reqFileName, String recordCount) {
+	public RetrieveDataPage(Long bridgeRequestId, int recordVersion, LocalDateTime date, String trade_ref,
+			String sourceSystem, String messageLoad, String messageStatus, String reqFileName, String recordCount) {
 		super();
 		this.bridgeRequestId = bridgeRequestId;
 		this.recordVersion = recordVersion;
-		// this.trade_date = trade_date;
+		this.date = date;
+		this.trade_ref = trade_ref;
 		this.sourceSystem = sourceSystem;
 		this.messageLoad = messageLoad;
 		this.messageStatus = messageStatus;
@@ -79,11 +85,13 @@ public class RetrieveDataPage {
 		this.recordVersion = recordVersion;
 	}
 
-	/*
-	 * public Date getTrade_date() { return trade_date; }
-	 * 
-	 * public void setTrade_date(Date trade_date) { this.trade_date = trade_date; }
-	 */
+	public LocalDateTime getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDateTime date) {
+		this.date = date;
+	}
 
 	public String getSourceSystem() {
 		return sourceSystem;
@@ -125,11 +133,20 @@ public class RetrieveDataPage {
 		this.recordCount = recordCount;
 	}
 
+	public String getTrade_ref() {
+		return trade_ref;
+	}
+
+	public void setTrade_ref(String trade_ref) {
+		this.trade_ref = trade_ref;
+	}
+
 	@Override
 	public String toString() {
 		return "RetrieveDataPage [bridgeRequestId=" + bridgeRequestId + ", recordVersion=" + recordVersion
-				+ ", sourceSystem=" + sourceSystem + ", messageLoad=" + messageLoad + ", messageStatus=" + messageStatus
-				+ ", reqFileName=" + reqFileName + ", recordCount=" + recordCount + "]";
+				+ ", date=" + date + ", trade_ref=" + trade_ref + ", sourceSystem=" + sourceSystem
+				+ ", messageLoad=" + messageLoad + ", messageStatus=" + messageStatus + ", reqFileName=" + reqFileName
+				+ ", recordCount=" + recordCount + "]";
 	}
 
 	// Constructors, getters, and setters

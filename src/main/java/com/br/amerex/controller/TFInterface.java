@@ -1,9 +1,11 @@
 package com.br.amerex.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -58,6 +60,31 @@ public class TFInterface {
 		return retrieveDataPage;
 		// return retrieveRepo.findById(bridgeRequestId).orElseThrow(() -> new
 		// IllegalArgumentException("Invalid user Id: " + bridgeRequestId));
+	}
+
+
+	@GetMapping("/getrade/{trade_ref}")
+	public ResponseEntity<String> getMessageLoad(@PathVariable String trade_ref,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+		String messageLoad = retrieveDataService.fetchMessageLoad(trade_ref, date);
+		if (messageLoad != null) {
+			return ResponseEntity.ok(messageLoad);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+
+	}
+	
+	@GetMapping("/get/id/{bridgeRequestId}")
+	public ResponseEntity<String> getMessageLoad(@PathVariable Long bridgeRequestId,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+		String messageLoad = retrieveDataService.fetchMessageLoad2(bridgeRequestId, date);
+		if (messageLoad != null) {
+			return ResponseEntity.ok(messageLoad);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+
 	}
 
 	// This returns only message load data(xml data) of the particular id

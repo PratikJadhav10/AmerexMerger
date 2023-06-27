@@ -1,6 +1,7 @@
 package com.br.amerex.services;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,24 @@ public class RetrieveDataService {
 
 	public List<RetrieveDataPage> findAllBridgeData() {
 		return retrieveRepo.viewAllBridgeData();
+	}
+
+	public String fetchMessageLoad(String trade_ref, LocalDateTime date) {
+		RetrieveDataPage retrieveobj = retrieveRepo.findByTradeRefAndDate(trade_ref, date);
+		if (retrieveobj != null) {
+			return retrieveobj.getMessageLoad();
+		} else
+			return "No data found";
+
+	}
+	
+	public String fetchMessageLoad2(Long bridgeRequestId, LocalDateTime date) {
+		RetrieveDataPage retrieveobj = retrieveRepo.findByIdAndDate(bridgeRequestId, date);
+		if (retrieveobj != null) {
+			return retrieveobj.getMessageLoad();
+		} else
+			return "No data found";
+
 	}
 
 	/*

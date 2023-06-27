@@ -112,10 +112,10 @@
 				</div>
 				<div class="col-sm-4" style="background-color:rgb(255, 255, 255);">
 					<form>
-						<div class="form-group">
+						<div class="input-container">
 							<label for="dateInput">Date:</label>
-							<input type="datetime-local" id="dateInput" name="dateInput" min="2023-05-15T00:00"
-								max="2023-05-18T00:00" disabled>
+							<input type="datetime-local" id="dateInput" name="dateInput" disabled>
+							<!--min="2023-05-15T00:00" max="2023-05-18T00:00"-->
 						</div>
 					</form>
 				</div>
@@ -134,20 +134,9 @@
 			</div>
 		</div>
 		<br>
-		<div class="container">
-			<div class="form-group">
-				<label for="datetimepicker">Date and Time:</label>
-				<div class="input-group date" id="datetimepicker" data-target-input="nearest">
-					<input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker" />
-					<div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
-						<div class="input-group-text"><i class="fa fa-calendar"></i></div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<!--<br>
 		<label for="dateInput">Date:</label>
-		<input type="date" id="dateInput" name="dateInput" disabled>
+		<input type="datetime-local" id="dateInput" name="dateInput" disabled>
 		<br>-->
 		<div class="container text-center">
 			<button type="button
@@ -202,6 +191,39 @@
 			});
 			// Retrieve XML logic goes here
 		}
+
+		function retrieveData() {
+			$(document).ready(function () {
+				$("#displayBtn").click(function () {
+					var tradeRef = $("#bridgeRequestId").val();
+					var date = new Date($("#datetimepicker").val());
+
+					// Format the date in the desired format expected by the backend
+					var formattedDate = date.toISOString();
+
+					$.get("/data/get/id/" + tradeRef, {date: formattedDate}, function (data) {
+						$("#designationTextArea").val(data);
+					}).fail(function () {
+						$("#designationTextArea").val("Error retrieving data.");
+					});
+				});
+			});
+		}
+
+
+		// Event listener for form submission
+		document.getElementById('fetchDataForm').addEventListener('submit', function (event) {
+			event.preventDefault();
+
+			// Get the values from the form
+			const tradeRef = document.getElementById('tradeRefInput').value;
+			const date = document.getElementById('dateInput').value;
+
+			// Call the fetchMessageLoad function
+			fetchMessageLoad(tradeRef, date);
+		});
+
+
 
 		$(document).ready(function () {
 			$('#datetimepicker').datetimepicker({
