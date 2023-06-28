@@ -18,7 +18,7 @@ public interface RetrieveDataPageRepository extends JpaRepository<RetrieveDataPa
 	public RetrieveDataPage findByTradeRefAndDate(@Param("trade_ref") String trade_ref,
 			@Param("date") LocalDateTime date);
 
-	@Query("SELECT i FROM RetrieveDataPage i WHERE i.bridgeRequestId = :bridgeRequestId AND i.date = :date")
+	@Query("SELECT i.messageLoad FROM RetrieveDataPage i WHERE i.bridgeRequestId = :bridgeRequestId AND i.date = :date")
 	public RetrieveDataPage findByIdAndDate(@Param("bridgeRequestId") Long bridgeRequestId,
 			@Param("date") LocalDateTime date);
 	/*

@@ -78,11 +78,13 @@ public class TFInterface {
 	@GetMapping("/get/id/{bridgeRequestId}")
 	public ResponseEntity<String> getMessageLoad(@PathVariable Long bridgeRequestId,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+	//	String messageLoad3 = retrieveRepo.findByIdAndDate(bridgeRequestId, date);
 		String messageLoad = retrieveDataService.fetchMessageLoad2(bridgeRequestId, date);
+		System.out.println(date);
 		if (messageLoad != null) {
-			return ResponseEntity.ok(messageLoad);
+			return new ResponseEntity<>(messageLoad, HttpStatus.OK);
 		} else {
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}

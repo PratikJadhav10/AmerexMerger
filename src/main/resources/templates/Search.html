@@ -140,7 +140,7 @@
 		<br>-->
 		<div class="container text-center">
 			<button type="button
-					" id="displayBtn" class="btn btn-primary btn-sm btn-success" onclick="retrieveXML()">
+					" id="displayBtn" class="btn btn-primary btn-sm btn-success" onclick="retrieveData()">
 				Retrieve
 				XML
 			</button>
@@ -196,7 +196,7 @@
 			$(document).ready(function () {
 				$("#displayBtn").click(function () {
 					var tradeRef = $("#bridgeRequestId").val();
-					var date = new Date($("#datetimepicker").val());
+					var date = new Date($("#dateInput").val());
 
 					// Format the date in the desired format expected by the backend
 					var formattedDate = date.toISOString();
