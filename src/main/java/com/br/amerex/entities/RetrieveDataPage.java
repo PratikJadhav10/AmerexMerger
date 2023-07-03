@@ -34,7 +34,8 @@ public class RetrieveDataPage {
 
 	private LocalDateTime date;
 
-	private String trade_ref;
+	@Column(name = "trade_ref", nullable = false)
+	private String tradeRef;
 
 	@Column(name = "source_system", nullable = false, length = 10)
 	private String sourceSystem;
@@ -55,13 +56,13 @@ public class RetrieveDataPage {
 
 	}
 
-	public RetrieveDataPage(Long bridgeRequestId, int recordVersion, LocalDateTime date, String trade_ref,
+	public RetrieveDataPage(Long bridgeRequestId, int recordVersion, LocalDateTime date, String tradeRef,
 			String sourceSystem, String messageLoad, String messageStatus, String reqFileName, String recordCount) {
 		super();
 		this.bridgeRequestId = bridgeRequestId;
 		this.recordVersion = recordVersion;
 		this.date = date;
-		this.trade_ref = trade_ref;
+		this.tradeRef = tradeRef;
 		this.sourceSystem = sourceSystem;
 		this.messageLoad = messageLoad;
 		this.messageStatus = messageStatus;
@@ -133,20 +134,20 @@ public class RetrieveDataPage {
 		this.recordCount = recordCount;
 	}
 
-	public String getTrade_ref() {
-		return trade_ref;
+	public String getTradeRef() {
+		return tradeRef;
 	}
 
-	public void setTrade_ref(String trade_ref) {
-		this.trade_ref = trade_ref;
+	public void setTradeRef(String tradeRef) {
+		this.tradeRef = tradeRef;
 	}
 
 	@Override
 	public String toString() {
-		return "RetrieveDataPage [bridgeRequestId=" + bridgeRequestId + ", recordVersion=" + recordVersion
-				+ ", date=" + date + ", trade_ref=" + trade_ref + ", sourceSystem=" + sourceSystem
-				+ ", messageLoad=" + messageLoad + ", messageStatus=" + messageStatus + ", reqFileName=" + reqFileName
-				+ ", recordCount=" + recordCount + "]";
+		return "RetrieveDataPage [bridgeRequestId=" + bridgeRequestId + ", recordVersion=" + recordVersion + ", date="
+				+ date + ", tradeRef=" + tradeRef + ", sourceSystem=" + sourceSystem + ", messageLoad=" + messageLoad
+				+ ", messageStatus=" + messageStatus + ", reqFileName=" + reqFileName + ", recordCount=" + recordCount
+				+ "]";
 	}
 
 	// Constructors, getters, and setters

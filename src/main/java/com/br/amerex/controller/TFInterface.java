@@ -62,7 +62,6 @@ public class TFInterface {
 		// IllegalArgumentException("Invalid user Id: " + bridgeRequestId));
 	}
 
-
 	@GetMapping("/getrade/{trade_ref}")
 	public ResponseEntity<String> getMessageLoad(@PathVariable String trade_ref,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
@@ -74,13 +73,41 @@ public class TFInterface {
 		}
 
 	}
-	
+
 	@GetMapping("/get/id/{bridgeRequestId}")
 	public ResponseEntity<String> getMessageLoad(@PathVariable Long bridgeRequestId,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-	//	String messageLoad3 = retrieveRepo.findByIdAndDate(bridgeRequestId, date);
+		// String messageLoad3 = retrieveRepo.findByIdAndDate(bridgeRequestId, date);
 		String messageLoad = retrieveDataService.fetchMessageLoad2(bridgeRequestId, date);
 		System.out.println(date);
+		if (messageLoad != null) {
+			return new ResponseEntity<>(messageLoad, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	@GetMapping("/get/tradeRef/{tradeRef}/{dateTime}")
+	public ResponseEntity<String> getMessageLoadByTradeRefAndDateTime(@PathVariable String tradeRef,
+			@PathVariable String dateTime) {
+		LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime);
+		String messageLoad = retrieveDataService.fetchMessageLoad(tradeRef, parsedDateTime);
+		if (messageLoad != null) {
+			return new ResponseEntity<>(messageLoad, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
+	// duplicate for demo purpose
+	@GetMapping("/get/tradeRefDate/{tradeRef}")
+	public ResponseEntity<String> getMessageLoad3(@PathVariable String tradeRef,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+		// String messageLoad3 = retrieveRepo.findByIdAndDate(bridgeRequestId, date);
+		String messageLoad = retrieveDataService.fetchMessageLoad(tradeRef, date);
+		System.out.println("controller layers-Date:" + date + "traderef:" + tradeRef);
 		if (messageLoad != null) {
 			return new ResponseEntity<>(messageLoad, HttpStatus.OK);
 		} else {

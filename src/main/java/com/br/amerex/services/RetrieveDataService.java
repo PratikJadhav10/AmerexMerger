@@ -37,21 +37,25 @@ public class RetrieveDataService {
 		return retrieveRepo.viewAllBridgeData();
 	}
 
-	public String fetchMessageLoad(String trade_ref, LocalDateTime date) {
-		RetrieveDataPage retrieveobj = retrieveRepo.findByTradeRefAndDate(trade_ref, date);
+	public String fetchMessageLoad(String tradeRef, LocalDateTime dateTime) {
+		System.out.println("tradeRef:" + tradeRef + ", date:" + dateTime);
+		RetrieveDataPage retrieveobj = retrieveRepo.findByTradeRefAndDate(tradeRef, dateTime);
+		System.out.println(retrieveobj);
 		if (retrieveobj != null) {
 			return retrieveobj.getMessageLoad();
 		} else
-			return "No data found";
+			return "No data found from trade_ref";
 
 	}
-	
+
 	public String fetchMessageLoad2(Long bridgeRequestId, LocalDateTime date) {
+		System.out.println("id:" + bridgeRequestId + ", date:" + date);
 		RetrieveDataPage retrieveobj = retrieveRepo.findByIdAndDate(bridgeRequestId, date);
+		System.out.println(retrieveobj);
 		if (retrieveobj != null) {
 			return retrieveobj.getMessageLoad();
 		} else
-			return "No data found1";
+			return "No data found from id";
 
 	}
 

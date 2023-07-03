@@ -14,11 +14,11 @@ public interface RetrieveDataPageRepository extends JpaRepository<RetrieveDataPa
 	@Query("SELECT r FROM  RetrieveDataPage r")
 	public List<RetrieveDataPage> viewAllBridgeData();
 
-	@Query("SELECT t FROM RetrieveDataPage t WHERE t.trade_ref = :trade_ref AND t.date = :date")
-	public RetrieveDataPage findByTradeRefAndDate(@Param("trade_ref") String trade_ref,
-			@Param("date") LocalDateTime date);
+	@Query("SELECT e FROM RetrieveDataPage e WHERE e.tradeRef = :tradeRef AND e.date = :dateTime")
+	public RetrieveDataPage findByTradeRefAndDate(@Param("tradeRef") String tradeRef,
+			@Param("dateTime") LocalDateTime dateTime);
 
-	@Query("SELECT i.messageLoad FROM RetrieveDataPage i WHERE i.bridgeRequestId = :bridgeRequestId AND i.date = :date")
+	@Query("SELECT i FROM RetrieveDataPage i WHERE i.bridgeRequestId = :bridgeRequestId AND i.date = :date")
 	public RetrieveDataPage findByIdAndDate(@Param("bridgeRequestId") Long bridgeRequestId,
 			@Param("date") LocalDateTime date);
 	/*
@@ -27,3 +27,4 @@ public interface RetrieveDataPageRepository extends JpaRepository<RetrieveDataPa
 	 */
 
 }
+//@Query("SELECT t FROM RetrieveDataPage t WHERE t.tradeRef = :tradeRef AND t.date = :date")

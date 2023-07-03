@@ -16,6 +16,10 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+	<!-- Include flatpickr JavaScript -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 	<style>
 		body {
 			font-family: Arial, sans-serif;
@@ -117,6 +121,10 @@
 							<input type="datetime-local" id="dateInput" name="dateInput" disabled>
 							<!--min="2023-05-15T00:00" max="2023-05-18T00:00"-->
 						</div>
+						<div class="input-container">
+							<input type="datetime-local" id="flatdateInput" name="dateInput2" class="datetimepicker">
+							<!--min="2023-05-15T00:00" max="2023-05-18T00:00"-->
+						</div>
 					</form>
 				</div>
 				<div class="col-sm-4" style="background-color:rgb(255, 255, 255);">
@@ -140,7 +148,7 @@
 		<br>-->
 		<div class="container text-center">
 			<button type="button
-					" id="displayBtn" class="btn btn-primary btn-sm btn-success" onclick="retrieveData()">
+					" id="displayBtn" class="btn btn-primary btn-sm btn-success" onclick="retrieveDataFromTradeRefAndDate()">
 				Retrieve
 				XML
 			</button>
@@ -195,13 +203,62 @@
 		function retrieveData() {
 			$(document).ready(function () {
 				$("#displayBtn").click(function () {
-					var tradeRef = $("#bridgeRequestId").val();
-					var date = new Date($("#dateInput").val());
+					var id = $("#bridgeRequestId").val();
+					console.log("id:"+ id);
+					var date = new Date($("#flatdateInput").val());
+					console.log("date:"+ date);
 
 					// Format the date in the desired format expected by the backend
 					var formattedDate = date.toISOString();
+					console.log("formatted date:"+ formattedDate);
 
-					$.get("/data/get/id/" + tradeRef, {date: formattedDate}, function (data) {
+					$.get("/data/get/id/" + id, {date: formattedDate}, function (data) {
+						$("#designationTextArea").val(data);
+					}).fail(function () {
+						$("#designationTextArea").val("Error retrieving data.");
+					});
+				});
+			});
+		}
+		
+		function retrieveDataFromTradeRefAndDate() {
+			$(document).ready(function () {
+				$("#displayBtn").click(function () {
+					var tradeRef = $("#bridgeRequestId").val();
+					console.log("id:"+ tradeRef);
+					var date = new Date($("#flatdateInput").val());
+					console.log("date:"+ date);
+
+					// Format the date in the desired format expected by the backend
+					var formattedDate = date.toISOString();
+					console.log("formatted date:"+ formattedDate);
+
+					$.get("/data/get/tradeRefDate/" + tradeRef, {date: formattedDate}, function (data) {
+						$("#designationTextArea").val(data);
+					}).fail(function () {
+						$("#designationTextArea").val("Error retrieving data.");
+					});
+				});
+			});
+		}
+
+		function retrieveFromTradeRef() {
+			$(document).ready(function () {
+				$("#displayBtn").click(function () {
+					var tradeRef = $("#bridgeRequestId").val();
+					console.log(tradeRef);
+					var dateTimeString = $("#flatdateInput").val();
+					console.log(dateTimeString);
+
+					var dateTime = new Date(dateTimeString);
+					console.log(dateTime);
+
+					// Format the date and time in the desired format expected by the backend
+					var formattedDateTime = dateTime.toISOString();
+					console.log(formattedDateTime);
+					console.log(encodeURIComponent(formattedDateTime));
+
+					$.get("/data/get/tradeRef/" + tradeRef + "/" + encodeURIComponent(formattedDateTime), function (data) {
 						$("#designationTextArea").val(data);
 					}).fail(function () {
 						$("#designationTextArea").val("Error retrieving data.");
@@ -363,6 +420,11 @@
 					console.error(error);
 				});
 		}
+
+		flatpickr(".datetimepicker", {
+			enableTime: true, // Enable time selection
+			dateFormat: "Y-m-d H:i", // Format of the selected date and time
+		});
 
 
 
