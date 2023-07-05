@@ -13,11 +13,21 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 @Entity
 @Table(name = "bridge_request")
 public class RetrieveDataPage {
+
+	@Column(name = "id_user_create", nullable = false)
+	private String idUserCreate;
+
+	private LocalDateTime dt_modified;
+
+	@Column(name = "id_user_last_modified", nullable = false)
+	private String idUserLastModified;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "bridge_request_id")
@@ -56,9 +66,13 @@ public class RetrieveDataPage {
 
 	}
 
-	public RetrieveDataPage(Long bridgeRequestId, int recordVersion, LocalDateTime date, String tradeRef,
-			String sourceSystem, String messageLoad, String messageStatus, String reqFileName, String recordCount) {
+	public RetrieveDataPage(String idUserCreate, LocalDateTime dt_modified, String idUserLastModified,
+			Long bridgeRequestId, int recordVersion, LocalDateTime date, String tradeRef, String sourceSystem,
+			String messageLoad, String messageStatus, String reqFileName, String recordCount) {
 		super();
+		this.idUserCreate = idUserCreate;
+		this.dt_modified = dt_modified;
+		this.idUserLastModified = idUserLastModified;
 		this.bridgeRequestId = bridgeRequestId;
 		this.recordVersion = recordVersion;
 		this.date = date;
@@ -68,6 +82,30 @@ public class RetrieveDataPage {
 		this.messageStatus = messageStatus;
 		this.reqFileName = reqFileName;
 		this.recordCount = recordCount;
+	}
+
+	public String getIdUserCreate() {
+		return idUserCreate;
+	}
+
+	public void setIdUserCreate(String idUserCreate) {
+		this.idUserCreate = idUserCreate;
+	}
+
+	public LocalDateTime getDt_modified() {
+		return dt_modified;
+	}
+
+	public void setDt_modified(LocalDateTime dt_modified) {
+		this.dt_modified = dt_modified;
+	}
+
+	public String getIdUserLastModified() {
+		return idUserLastModified;
+	}
+
+	public void setIdUserLastModified(String idUserLastModified) {
+		this.idUserLastModified = idUserLastModified;
 	}
 
 	public Long getBridgeRequestId() {
@@ -92,6 +130,14 @@ public class RetrieveDataPage {
 
 	public void setDate(LocalDateTime date) {
 		this.date = date;
+	}
+
+	public String getTradeRef() {
+		return tradeRef;
+	}
+
+	public void setTradeRef(String tradeRef) {
+		this.tradeRef = tradeRef;
 	}
 
 	public String getSourceSystem() {
@@ -134,20 +180,13 @@ public class RetrieveDataPage {
 		this.recordCount = recordCount;
 	}
 
-	public String getTradeRef() {
-		return tradeRef;
-	}
-
-	public void setTradeRef(String tradeRef) {
-		this.tradeRef = tradeRef;
-	}
-
 	@Override
 	public String toString() {
-		return "RetrieveDataPage [bridgeRequestId=" + bridgeRequestId + ", recordVersion=" + recordVersion + ", date="
-				+ date + ", tradeRef=" + tradeRef + ", sourceSystem=" + sourceSystem + ", messageLoad=" + messageLoad
-				+ ", messageStatus=" + messageStatus + ", reqFileName=" + reqFileName + ", recordCount=" + recordCount
-				+ "]";
+		return "RetrieveDataPage [idUserCreate=" + idUserCreate + ", dt_modified=" + dt_modified
+				+ ", idUserLastModified=" + idUserLastModified + ", bridgeRequestId=" + bridgeRequestId
+				+ ", recordVersion=" + recordVersion + ", date=" + date + ", tradeRef=" + tradeRef + ", sourceSystem="
+				+ sourceSystem + ", messageLoad=" + messageLoad + ", messageStatus=" + messageStatus + ", reqFileName="
+				+ reqFileName + ", recordCount=" + recordCount + "]";
 	}
 
 	// Constructors, getters, and setters

@@ -78,6 +78,11 @@ public class AmerexController {
 		return "Search.html";
 
 	}
+	
+	@GetMapping(value = "/script")
+	public String script(Model model) {
+		return "script.js";
+	}
 
 	@GetMapping(value = "/bridgedata")
 	public List<RetrieveDataPage> getData() {

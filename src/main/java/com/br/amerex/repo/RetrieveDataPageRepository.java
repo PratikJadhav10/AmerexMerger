@@ -21,6 +21,9 @@ public interface RetrieveDataPageRepository extends JpaRepository<RetrieveDataPa
 	@Query("SELECT i FROM RetrieveDataPage i WHERE i.bridgeRequestId = :bridgeRequestId AND i.date = :date")
 	public RetrieveDataPage findByIdAndDate(@Param("bridgeRequestId") Long bridgeRequestId,
 			@Param("date") LocalDateTime date);
+	
+	@Query("SELECT r FROM RetrieveDataPage r WHERE r.reqFileName = :reqFileName")
+	public RetrieveDataPage findByReqFileName(@Param("reqFileName") String reqFileName);
 	/*
 	 * @Query public RetrieveDataPage findBygatewayIdAndDate(String recordCount,
 	 * String date);

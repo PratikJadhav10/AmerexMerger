@@ -116,9 +116,10 @@ public class TFInterface {
 
 	}
 
-	// This returns only message load data(xml data) of the particular id
+	// This returns only message load data(xml data) of the particular
+	// id(retrieveXML(),bridgeRequestId)
 	@GetMapping("/new/{bridgeRequestId}")
-	public String getXmlData1(@PathVariable Long bridgeRequestId) throws NoSuchBridgeIdException {
+	public String getXmlDataFromBridgeRequestId(@PathVariable Long bridgeRequestId) throws NoSuchBridgeIdException {
 		System.out.println("getXmlData()");
 		Optional<RetrieveDataPage> retrieveData = retrieveRepo.findById(bridgeRequestId);
 		if (retrieveData.isPresent()) {
@@ -128,6 +129,19 @@ public class TFInterface {
 		} else {
 			return "Xml data not found";
 		}
+	}
+
+	// This returns only message load data(xml data) of the particular
+	// id(retrieveXML(),reqFileName)
+	@GetMapping("/new/reqFileName/{reqFileName}")
+	public ResponseEntity<String> getXmlDataFromReqFileName(@PathVariable String reqFileName) throws NoSuchBridgeIdException {
+		System.out.println("getXmlDataFromReqFileName");
+		String messageLoad = retrieveDataService.fetchByReqFileName(reqFileName);
+		System.out.println("reqFileName:" + reqFileName);
+		if (messageLoad != null) {
+			return new ResponseEntity<>(messageLoad, HttpStatus.OK);
+		} else
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@PutMapping("/new/update/messageload")

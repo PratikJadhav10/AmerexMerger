@@ -36,6 +36,15 @@ public class RetrieveDataService {
 	public List<RetrieveDataPage> findAllBridgeData() {
 		return retrieveRepo.viewAllBridgeData();
 	}
+	
+	public String fetchByReqFileName(String reqFileName) {
+		RetrieveDataPage retrieveobj = retrieveRepo.findByReqFileName(reqFileName);
+		if (retrieveobj !=null) {
+			return retrieveobj.getMessageLoad();
+		}else
+		return "No data found from reqFileName";
+		
+	}
 
 	public String fetchMessageLoad(String tradeRef, LocalDateTime dateTime) {
 		System.out.println("tradeRef:" + tradeRef + ", date:" + dateTime);
