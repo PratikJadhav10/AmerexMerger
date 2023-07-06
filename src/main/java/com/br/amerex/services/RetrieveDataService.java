@@ -36,14 +36,14 @@ public class RetrieveDataService {
 	public List<RetrieveDataPage> findAllBridgeData() {
 		return retrieveRepo.viewAllBridgeData();
 	}
-	
+
 	public String fetchByReqFileName(String reqFileName) {
 		RetrieveDataPage retrieveobj = retrieveRepo.findByReqFileName(reqFileName);
-		if (retrieveobj !=null) {
+		if (retrieveobj != null) {
 			return retrieveobj.getMessageLoad();
-		}else
-		return "No data found from reqFileName";
-		
+		} else
+			return "No data found from reqFileName";
+
 	}
 
 	public String fetchMessageLoad(String tradeRef, LocalDateTime dateTime) {
@@ -65,6 +65,14 @@ public class RetrieveDataService {
 			return retrieveobj.getMessageLoad();
 		} else
 			return "No data found from id";
+
+	}
+
+	public List<RetrieveDataPage> findByDateAndMessageLoadData(LocalDateTime createDate, LocalDateTime modifiedDate,
+			String tradeReference) {
+		List<RetrieveDataPage> retrieveobj = retrieveRepo.findByDateAndMessageLoadData(createDate, modifiedDate,
+				tradeReference);
+		return retrieveobj;
 
 	}
 

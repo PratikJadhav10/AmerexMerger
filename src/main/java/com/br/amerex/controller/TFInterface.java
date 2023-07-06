@@ -101,7 +101,7 @@ public class TFInterface {
 
 	}
 
-	// duplicate for demo purpose
+	// Working Code
 	@GetMapping("/get/tradeRefDate/{tradeRef}")
 	public ResponseEntity<String> getMessageLoad3(@PathVariable String tradeRef,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
@@ -134,7 +134,8 @@ public class TFInterface {
 	// This returns only message load data(xml data) of the particular
 	// id(retrieveXML(),reqFileName)
 	@GetMapping("/new/reqFileName/{reqFileName}")
-	public ResponseEntity<String> getXmlDataFromReqFileName(@PathVariable String reqFileName) throws NoSuchBridgeIdException {
+	public ResponseEntity<String> getXmlDataFromReqFileName(@PathVariable String reqFileName)
+			throws NoSuchBridgeIdException {
 		System.out.println("getXmlDataFromReqFileName");
 		String messageLoad = retrieveDataService.fetchByReqFileName(reqFileName);
 		System.out.println("reqFileName:" + reqFileName);
@@ -142,6 +143,18 @@ public class TFInterface {
 			return new ResponseEntity<>(messageLoad, HttpStatus.OK);
 		} else
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@GetMapping("/new/findByDateAndMessageLoadData/{tradeReference}")
+	public ResponseEntity<List<RetrieveDataPage>> findByDateAndMessageLoadData(@PathVariable String tradeReference,
+			LocalDateTime createDate, LocalDateTime modifiedDate) {
+		List<RetrieveDataPage> data = retrieveDataService.findByDateAndMessageLoadData(createDate, modifiedDate,
+				tradeReference);
+		if (data != null && !data.isEmpty()) {
+			return new ResponseEntity<>(data, HttpStatus.OK);
+		} else
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
 	}
 
 	@PutMapping("/new/update/messageload")

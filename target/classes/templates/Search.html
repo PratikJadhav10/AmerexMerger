@@ -181,6 +181,41 @@
 				</div>
 			</form>
 		</div>
+		<div id="dataContainer">
+        <!-- Data will be displayed here -->
+    </div>
+		<!--<div>
+		<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+</div>-->
 		<div class="container text-center">
 			<button type="button" id="submitBtn" class="btn btn-primary btn-sm btn-success" onclick="postData()">
 				Submit
@@ -197,14 +232,16 @@
 			document.getElementById('bridgeRequestId').disabled = false;
 			document.getElementById('flatdateInput').disabled = false;
 			var currentDate = new Date().toISOString().slice(0, 16);
-			document.getElementById('dateInput').min = currentDate;
-			document.getElementById('dateInput').max = currentDate;
-			document.getElementById('dateInput').value = currentDate;
+			//document.getElementById('dateInput').min = currentDate;
+			//document.getElementById('dateInput').max = currentDate;
+			//document.getElementById('dateInput').value = currentDate;
+			document.getElementById('bridgeRequestId').placeholder = "Enter TradeRef value";
 		}
 
 		function disableDateField() {
 			document.getElementById('flatdateInput').disabled = true;
 			document.getElementById('bridgeRequestId').disabled = false;
+			document.getElementById('bridgeRequestId').placeholder = "Enter GatewayId";
 		}
 
 		function retrieveXML() {
@@ -220,15 +257,20 @@
 		}
 
 		function retrieveXMLFromReqFileName() {
-			$(document).ready(function () {
+			/*$(document).ready(function () {
 				$("#displayBtn").click(function () {
 					var reqFileName = $("#bridgeRequestId").val();
 					$.get("/data/new/reqFileName/" + reqFileName, function (data) {
 						$("#designationTextArea").val(data);
 					});
 				});
-			});
-			// Retrieve XML logic goes here
+			});*/
+			console.log(1);
+			//debugger;
+			var reqFileName = $("#bridgeRequestId").val();
+					$.get("/data/new/reqFileName/" + reqFileName, function (data) {
+						$("#designationTextArea").val(data);
+					});
 		}
 
 		function retrieveData() {
@@ -253,7 +295,7 @@
 		}
 
 		function retrieveDataFromTradeRefAndDate() {
-			$(document).ready(function () {
+			/*$(document).ready(function () {
 				$("#displayBtn").click(function () {
 					var tradeRef = $("#bridgeRequestId").val();
 					console.log("id:" + tradeRef);
@@ -270,7 +312,21 @@
 						$("#designationTextArea").val("Error retrieving data.");
 					});
 				});
-			});
+			});*/
+			var tradeRef = $("#bridgeRequestId").val();
+					console.log("id:" + tradeRef);
+					var date = new Date($("#flatdateInput").val());
+					console.log("date:" + date);
+
+					// Format the date in the desired format expected by the backend
+					var formattedDate = date.toISOString();
+					console.log("formatted date:" + formattedDate);
+
+					$.get("/data/get/tradeRefDate/" + tradeRef, {date: formattedDate}, function (data) {
+						$("#designationTextArea").val(data);
+					}).fail(function () {
+						$("#designationTextArea").val("Error retrieving data.");
+					});
 		}
 
 		function retrieveFromTradeRef() {
@@ -299,7 +355,15 @@
 		}
 
 
-		// Event listener for form submission
+		
+
+
+
+		$(document).ready(function () {
+			$('#datetimepicker').datetimepicker({
+				format: 'YYYY-MM-DD HH:mm:ss'
+			});
+			// Event listener for form submission
 		document.getElementById('fetchDataForm').addEventListener('submit', function (event) {
 			event.preventDefault();
 
@@ -310,13 +374,6 @@
 			// Call the fetchMessageLoad function
 			fetchMessageLoad(tradeRef, date);
 		});
-
-
-
-		$(document).ready(function () {
-			$('#datetimepicker').datetimepicker({
-				format: 'YYYY-MM-DD HH:mm:ss'
-			});
 		})
 
 
@@ -457,7 +514,7 @@
 			dateFormat: "Y-m-d H:i", // Format of the selected date and time
 		});
 
-		<!--Below is JS function of code mirror to display formatted XML data-->
+		/*Below is JS function of code mirror to display formatted XML data-->
 		// Get the textarea element
 		var textarea = document.getElementById("designationTextArea");
 		var editor = CodeMirror.fromTextArea(textarea, {
@@ -465,11 +522,11 @@
 			lineNumbers: true
 
 		});
-
+        */
 		//Below functionality is to handle the two different functions based on radio buttons selected.
 
 		var retrieveBtn = document.getElementById("displayBtn");
-		retrieveBtn.addEventListener("click", handleretrieve);
+		//retrieveBtn.addEventListener("click", handleretrieve);
 
 		function handleretrieve() {
 			var tradeRefOption = document.getElementById("tradeRefOption");
