@@ -182,8 +182,8 @@
 			</form>
 		</div>
 		<div id="dataContainer">
-        <!-- Data will be displayed here -->
-    </div>
+			<!-- Data will be displayed here -->
+		</div>
 		<!--<div>
 		<table class="table table-striped">
   <thead>
@@ -217,7 +217,8 @@
 </table>
 </div>-->
 		<div class="container text-center">
-			<button type="button" id="submitBtn" class="btn btn-primary btn-sm btn-success" onclick="postData()">
+			<button type="button" id="submitBtn" class="btn btn-primary btn-sm btn-success"
+				onclick="updateXmlDataFromReqFileName()">
 				Submit
 			</button>
 		</div>
@@ -256,6 +257,7 @@
 			// Retrieve XML logic goes here
 		}
 
+		//WORKING
 		function retrieveXMLFromReqFileName() {
 			/*$(document).ready(function () {
 				$("#displayBtn").click(function () {
@@ -268,9 +270,9 @@
 			console.log(1);
 			//debugger;
 			var reqFileName = $("#bridgeRequestId").val();
-					$.get("/data/new/reqFileName/" + reqFileName, function (data) {
-						$("#designationTextArea").val(data);
-					});
+			$.get("/data/new/reqFileName/" + reqFileName, function (data) {
+				$("#designationTextArea").val(data);
+			});
 		}
 
 		function retrieveData() {
@@ -294,6 +296,7 @@
 			});
 		}
 
+		//WORKING
 		function retrieveDataFromTradeRefAndDate() {
 			/*$(document).ready(function () {
 				$("#displayBtn").click(function () {
@@ -314,19 +317,148 @@
 				});
 			});*/
 			var tradeRef = $("#bridgeRequestId").val();
-					console.log("id:" + tradeRef);
-					var date = new Date($("#flatdateInput").val());
-					console.log("date:" + date);
+			console.log("id:" + tradeRef);
+			var date = new Date($("#flatdateInput").val());
+			console.log("date:" + date);
 
-					// Format the date in the desired format expected by the backend
-					var formattedDate = date.toISOString();
-					console.log("formatted date:" + formattedDate);
+			// Format the date in the desired format expected by the backend
+			var formattedDate = date.toISOString();
+			console.log("formatted date:" + formattedDate);
 
-					$.get("/data/get/tradeRefDate/" + tradeRef, {date: formattedDate}, function (data) {
-						$("#designationTextArea").val(data);
-					}).fail(function () {
-						$("#designationTextArea").val("Error retrieving data.");
-					});
+			$.get("/data/get/tradeRefDate/" + tradeRef, {date: formattedDate}, function (data) {
+				$("#designationTextArea").val(data);
+			}).fail(function () {
+				$("#designationTextArea").val("Error retrieving data.");
+			});
+		}
+		//WORKING
+		function handleretrieve() {
+			var tradeRefOption = document.getElementById("tradeRefOption");
+			var gatewayIdOption = document.getElementById("gatewayIdOption");
+			var bridgeRequestId = document.getElementById("bridgeRequestId").value.trim();
+
+			if (tradeRefOption.checked) {
+				retrieveDataFromTradeRefAndDate(bridgeRequestId);
+			} else if (gatewayIdOption.checked) {
+				retrieveXMLFromReqFileName(bridgeRequestId);
+			}
+		}
+
+		//WORKING(NOT IS USE)
+		function postData() {
+			// Retrieve the updated data from the textarea
+			var bridgeRequestId = $("#bridgeRequestId").val();
+			var updatedData = $("#designationTextArea").val();
+			//var updatedData = document.getElementById("designationTextArea").value;
+			//var bridgeRequestId = document.getElementById("bridgeRequestId").value;
+
+			// Fetch the CSRF token
+			fetch("/api/amerex/csrf-token")
+				.then(function (response) {
+					if (response.ok) {
+						return response.text();
+					} else {
+						throw new Error("Error retrieving CSRF token: " + response.status);
+					}
+				})
+				.then(function (csrfToken) {
+					// Prepare the data to be sent in the request body
+					var requestBody = {
+						bridgeRequestId: parseInt(bridgeRequestId), // Convert to a number
+						updatedData: updatedData
+					};
+
+					// Send the AJAX request with the CSRF token
+					fetch(`/data/new/update/messageload?bridgeRequestId=${requestBody.bridgeRequestId}`, {
+						method: "PUT",
+						headers: {
+							"Content-Type": "application/json",
+							"X-CSRF-Token": csrfToken
+						},
+						body: JSON.stringify(requestBody.updatedData)
+					})
+						.then(function (response) {
+							// Handle the response
+							if (response.ok) {
+								return response.text();
+							} else {
+								throw new Error("Error updating data: " + response.status);
+							}
+						})
+						.then(function (responseText) {
+							console.log("Successful");
+							// Display a success message or perform any other actions
+							console.log(responseText);
+						})
+						.catch(function (error) {
+							// Handle any errors that occurred during the request
+							console.log("Failed");
+							console.error(error);
+						});
+				})
+				.catch(function (error) {
+					// Handle any errors that occurred during the CSRF token retrieval
+					console.error(error);
+				});
+		}
+
+		//WORKING
+		function updateXmlDataFromReqFileName() {
+			//debugger;
+			// Retrieve the updated data from the textarea
+			var reqFileName = $("#bridgeRequestId").val();
+			var updatedData = $("#designationTextArea").val();
+			//var updatedData = document.getElementById("designationTextArea").value;
+			//var bridgeRequestId = document.getElementById("bridgeRequestId").value;
+
+			// Fetch the CSRF token
+			fetch("/api/amerex/csrf-token")
+				.then(function (response) {
+					if (response.ok) {
+						return response.text();
+					} else {
+						throw new Error("Error retrieving CSRF token: " + response.status);
+					}
+				})
+				.then(function (csrfToken) {
+					// Prepare the data to be sent in the request body
+					var requestBody = {
+						reqFileName: reqFileName,
+						updatedData: updatedData
+					};
+
+					// Send the AJAX request with the CSRF token
+					fetch(`/data/new/update/reqFileName/${requestBody.reqFileName}`, {
+						method: "PUT",
+						headers: {
+							"Content-Type": "application/json",
+							"X-CSRF-Token": csrfToken
+						},
+						body: JSON.stringify(requestBody.updatedData)
+					})
+						.then(function (response) {
+							// Handle the response
+							if (response.ok) {
+								return response.text();
+							} else {
+								throw new Error("Error updating data: " + response.status);
+							}
+						})
+						.then(function (responseText) {
+							console.log("Successful");
+							// Display a success message or perform any other actions
+							console.log(responseText);
+						})
+						.catch(function (error) {
+							// Handle any errors that occurred during the request
+							console.log("Failed");
+							console.error(error);
+						});
+				})
+				.catch(function (error) {
+					// Handle any errors that occurred during the CSRF token retrieval
+					console.error(error);
+				});
 		}
 
 		function retrieveFromTradeRef() {
@@ -355,7 +487,7 @@
 		}
 
 
-		
+
 
 
 
@@ -364,16 +496,16 @@
 				format: 'YYYY-MM-DD HH:mm:ss'
 			});
 			// Event listener for form submission
-		document.getElementById('fetchDataForm').addEventListener('submit', function (event) {
-			event.preventDefault();
+			document.getElementById('fetchDataForm').addEventListener('submit', function (event) {
+				event.preventDefault();
 
-			// Get the values from the form
-			const tradeRef = document.getElementById('tradeRefInput').value;
-			const date = document.getElementById('dateInput').value;
+				// Get the values from the form
+				const tradeRef = document.getElementById('tradeRefInput').value;
+				const date = document.getElementById('dateInput').value;
 
-			// Call the fetchMessageLoad function
-			fetchMessageLoad(tradeRef, date);
-		});
+				// Call the fetchMessageLoad function
+				fetchMessageLoad(tradeRef, date);
+			});
 		})
 
 
@@ -452,93 +584,28 @@
 				});
 		}
 
-		function postData() {
-			// Retrieve the updated data from the textarea
-			var bridgeRequestId = $("#bridgeRequestId").val();
-			var updatedData = $("#designationTextArea").val();
-			//var updatedData = document.getElementById("designationTextArea").value;
-			//var bridgeRequestId = document.getElementById("bridgeRequestId").value;
 
-			// Fetch the CSRF token
-			fetch("/api/amerex/csrf-token")
-				.then(function (response) {
-					if (response.ok) {
-						return response.text();
-					} else {
-						throw new Error("Error retrieving CSRF token: " + response.status);
-					}
-				})
-				.then(function (csrfToken) {
-					// Prepare the data to be sent in the request body
-					var requestBody = {
-						bridgeRequestId: parseInt(bridgeRequestId), // Convert to a number
-						updatedData: updatedData
-					};
-
-					// Send the AJAX request with the CSRF token
-					fetch(`/data/new/update/messageload?bridgeRequestId=${requestBody.bridgeRequestId}`, {
-						method: "PUT",
-						headers: {
-							"Content-Type": "application/json",
-							"X-CSRF-Token": csrfToken
-						},
-						body: JSON.stringify(requestBody.updatedData)
-					})
-						.then(function (response) {
-							// Handle the response
-							if (response.ok) {
-								return response.text();
-							} else {
-								throw new Error("Error updating data: " + response.status);
-							}
-						})
-						.then(function (responseText) {
-							console.log("Successful");
-							// Display a success message or perform any other actions
-							console.log(responseText);
-						})
-						.catch(function (error) {
-							// Handle any errors that occurred during the request
-							console.log("Failed");
-							console.error(error);
-						});
-				})
-				.catch(function (error) {
-					// Handle any errors that occurred during the CSRF token retrieval
-					console.error(error);
-				});
-		}
 
 		flatpickr(".datetimepicker", {
 			enableTime: true, // Enable time selection
 			dateFormat: "Y-m-d H:i", // Format of the selected date and time
 		});
 
-		/*Below is JS function of code mirror to display formatted XML data-->
-		// Get the textarea element
+		/*Below is JS function of code mirror to display formatted XML data
+		 Get the textarea element
 		var textarea = document.getElementById("designationTextArea");
 		var editor = CodeMirror.fromTextArea(textarea, {
 			mode: "xml",
 			lineNumbers: true
 
-		});
-        */
+		});*/
+
 		//Below functionality is to handle the two different functions based on radio buttons selected.
 
-		var retrieveBtn = document.getElementById("displayBtn");
+
 		//retrieveBtn.addEventListener("click", handleretrieve);
+		//  var retrieveBtn = document.getElementById("displayBtn");
 
-		function handleretrieve() {
-			var tradeRefOption = document.getElementById("tradeRefOption");
-			var gatewayIdOption = document.getElementById("gatewayIdOption");
-			var bridgeRequestId = document.getElementById("bridgeRequestId").value.trim();
-
-			if (tradeRefOption.checked) {
-				retrieveDataFromTradeRefAndDate(bridgeRequestId);
-			} else if (gatewayIdOption.checked) {
-				retrieveXMLFromReqFileName(bridgeRequestId);
-			}
-		}
 
 		// Get the current date and time
 		var currentDate = new Date();
@@ -561,6 +628,68 @@
 		// Set the maximum date and time for the fromDateInput
 		var maxFromDate = new Date(currentYear, currentMonth - 1, currentDay, 15, 30).toISOString().split('.')[0];
 		document.getElementById('fromDateInput').max = maxFromDate;
+
+
+         
+		function getDatawithTradeRefAndDateRange() {
+			var keyword = document.getElementById("bridgeRequestId").value;
+			var fromDate = document.getElementById("fromDateInput").value;
+			var toDate = document.getElementById("toDateInput").value;
+
+			// Send AJAX request to the backend
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "/data/new/findByDateAndMessageLoadData/" + encodeURIComponent(keyword) +
+				"?startDate=" + encodeURIComponent(fromDate) +
+				"&endDate=" + encodeURIComponent(toDate));
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					if (xhr.status === 200) {
+						var data = JSON.parse(xhr.responseText);
+						displayDataforTradeRef(data);
+					} else {
+						console.error("Error retrieving data: " + xhr.status);
+					}
+				}
+			};
+			xhr.send();
+		}
+
+		function displayDataforTradeRef(data) {
+			var container = document.getElementById("dataContainer");
+			container.innerHTML = ""; // Clear previous data
+
+			if (data.length > 0) {
+				var table = document.createElement("table");
+				table.border = "1";
+
+				// Create table header
+				var headerRow = document.createElement("tr");
+				for (var prop in data[0]) {
+					var headerCell = document.createElement("th");
+					headerCell.textContent = prop;
+					headerRow.appendChild(headerCell);
+				}
+				table.appendChild(headerRow);
+
+				// Create table rows
+				for (var i = 0; i < data.length; i++) {
+					var rowData = data[i];
+					var row = document.createElement("tr");
+
+					for (var prop in rowData) {
+						var cell = document.createElement("td");
+						cell.textContent = rowData[prop];
+						row.appendChild(cell);
+					}
+
+					table.appendChild(row);
+				}
+
+				container.appendChild(table);
+			} else {
+				container.textContent = "No data found.";
+			}
+		}
 
 
 

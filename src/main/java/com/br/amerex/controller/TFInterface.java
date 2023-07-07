@@ -145,9 +145,10 @@ public class TFInterface {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@GetMapping("/new/findByDateAndMessageLoadData/{tradeReference}")
+	@GetMapping("/new/findByDateAndMessageLoadData/{tradeReference}/{createDate}/{modifiedDate}")
 	public ResponseEntity<List<RetrieveDataPage>> findByDateAndMessageLoadData(@PathVariable String tradeReference,
-			LocalDateTime createDate, LocalDateTime modifiedDate) {
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createDate,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime modifiedDate) {
 		List<RetrieveDataPage> data = retrieveDataService.findByDateAndMessageLoadData(createDate, modifiedDate,
 				tradeReference);
 		if (data != null && !data.isEmpty()) {
@@ -163,6 +164,18 @@ public class TFInterface {
 		System.out.println("Putmapping");
 		RetrieveDataPage retrieveData = retrieveRepo.findById(bridgeRequestId)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid id:" + bridgeRequestId));
+		retrieveData.setMessageLoad(updatedData);
+		retrieveRepo.save(retrieveData);
+
+		return "Data updated successfully";
+
+	}
+
+	@PutMapping("/new/update/reqFileName/{reqFileName}")
+	public String getXmlDataFromReqFileName(@PathVariable String reqFileName, @RequestBody String updatedData)
+			throws NoSuchBridgeIdException {
+		System.out.println("getXmlDataFromReqFileName()");
+		RetrieveDataPage retrieveData = retrieveRepo.findByReqFileName(reqFileName);
 		retrieveData.setMessageLoad(updatedData);
 		retrieveRepo.save(retrieveData);
 
