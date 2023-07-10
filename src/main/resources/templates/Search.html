@@ -5,12 +5,17 @@
 	<title>Search Form</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+		crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<link rel="stylesheet"
 		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
 	<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -22,7 +27,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 	<!--Below is script library of code mirror to display formatted XML data-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
-	<script src="script.js"></script>
 	<style>
 		body {
 			font-family: Arial, sans-serif;
@@ -181,41 +185,41 @@
 				</div>
 			</form>
 		</div>
-		<div id="dataContainer">
+		<div id="dataContainer" class="table-responsive table table-striped container">
 			<!-- Data will be displayed here -->
 		</div>
-		<!--<div>
-		<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
-      <td>the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
-</div>-->
+		<div>
+			<table class="table table-striped ">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Company</th>
+						<th scope="col">Name</th>
+						<th scope="col">Address</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">1</th>
+						<td>Capgemini</td>
+						<td>Pratik</td>
+						<td>Airoli</td>
+					</tr>
+					<tr>
+						<th scope="row">2</th>
+						<td>Kiya</td>
+						<td>Ajay</td>
+						<td>Andheri</td>
+					</tr>
+					<tr>
+						<th scope="row">3</th>
+						<td>Accenture</td>
+						<td>Rohan</td>
+						<td>Thane</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<div class="container text-center">
 			<button type="button" id="submitBtn" class="btn btn-primary btn-sm btn-success"
 				onclick="updateXmlDataFromReqFileName()">
@@ -275,26 +279,7 @@
 			});
 		}
 
-		function retrieveData() {
-			$(document).ready(function () {
-				$("#displayBtn").click(function () {
-					var id = $("#bridgeRequestId").val();
-					console.log("id:" + id);
-					var date = new Date($("#flatdateInput").val());
-					console.log("date:" + date);
 
-					// Format the date in the desired format expected by the backend
-					var formattedDate = date.toISOString();
-					console.log("formatted date:" + formattedDate);
-
-					$.get("/data/get/id/" + id, {date: formattedDate}, function (data) {
-						$("#designationTextArea").val(data);
-					}).fail(function () {
-						$("#designationTextArea").val("Error retrieving data.");
-					});
-				});
-			});
-		}
 
 		//WORKING
 		function retrieveDataFromTradeRefAndDate() {
@@ -338,7 +323,7 @@
 			var bridgeRequestId = document.getElementById("bridgeRequestId").value.trim();
 
 			if (tradeRefOption.checked) {
-				retrieveDataFromTradeRefAndDate(bridgeRequestId);
+				getDatawithTradeRefAndDateRange2(bridgeRequestId);
 			} else if (gatewayIdOption.checked) {
 				retrieveXMLFromReqFileName(bridgeRequestId);
 			}
@@ -459,6 +444,114 @@
 					// Handle any errors that occurred during the CSRF token retrieval
 					console.error(error);
 				});
+		}
+
+		function getDatawithTradeRefAndDateRange2() {
+			var tradeRef = document.getElementById("bridgeRequestId").value;
+			console.log("TradeRef:" + tradeRef);
+			var fromDate = new Date($("#fromDateInput").val());
+			var toDate = new Date($("#toDateInput").val());
+			console.log("fromDate:" + fromDate);
+			console.log("toDate:" + toDate);
+
+			// Format the date in the desired format expected by the backend
+			var formattedfromDate = fromDate.toISOString();
+			var formattedtoDate = toDate.toISOString();
+			console.log("formattedfromDate:" + formattedfromDate);
+			console.log("formattedtoDate:" + formattedtoDate);
+
+			$.get("/data/new/findByDateAndMessageLoadData/" + tradeRef, {createDate: formattedfromDate, modifiedDate: formattedtoDate})
+				.done(function (data) {
+					displayDataforTradeRef(data);
+				})
+				.fail(function () {
+					$("#designationTextArea").val("Error retrieving data.");
+				});
+		}
+
+
+
+		//Working
+		function displayDataforTradeRef(data) {
+			var container = document.getElementById("dataContainer");
+			container.innerHTML = ""; // Clear previous data
+
+			if (data.length > 0) {
+				var table = document.createElement("table");
+				table.classList.add("table", "table-striped");
+				//table.border = "1";
+
+				// Create table header
+				var headerRow = document.createElement("tr");
+				for (var prop in data[0]) {
+					var headerCell = document.createElement("th");
+					headerCell.textContent = prop;
+					headerRow.appendChild(headerCell);
+				}
+				table.appendChild(headerRow);
+
+				// Create table rows
+				for (var i = 0; i < data.length; i++) {
+					var rowData = data[i];
+					var row = document.createElement("tr");
+
+					for (var prop in rowData) {
+						var cell = document.createElement("td");
+						cell.textContent = rowData[prop];
+						row.appendChild(cell);
+					}
+
+					table.appendChild(row);
+				}
+
+				container.appendChild(table);
+			} else {
+				container.textContent = "No data found.";
+			}
+		}
+
+		/*function getDatawithTradeRefAndDateRange() {
+			var keyword = document.getElementById("bridgeRequestId").value;
+			var fromDate = document.getElementById("fromDateInput").value;
+			var toDate = document.getElementById("toDateInput").value;
+
+			// Send AJAX request to the backend
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", "/data/new/findByDateAndMessageLoadData/" + encodeURIComponent(keyword) +
+				"?startDate=" + encodeURIComponent(fromDate) +
+				"&endDate=" + encodeURIComponent(toDate));
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					if (xhr.status === 200) {
+						var data = JSON.parse(xhr.responseText);
+						displayDataforTradeRef(data);
+					} else {
+						console.error("Error retrieving data: " + xhr.status);
+					}
+				}
+			};
+			xhr.send();
+		}*/
+
+		function retrieveData() {
+			$(document).ready(function () {
+				$("#displayBtn").click(function () {
+					var id = $("#bridgeRequestId").val();
+					console.log("id:" + id);
+					var date = new Date($("#flatdateInput").val());
+					console.log("date:" + date);
+
+					// Format the date in the desired format expected by the backend
+					var formattedDate = date.toISOString();
+					console.log("formatted date:" + formattedDate);
+
+					$.get("/data/get/id/" + id, {date: formattedDate}, function (data) {
+						$("#designationTextArea").val(data);
+					}).fail(function () {
+						$("#designationTextArea").val("Error retrieving data.");
+					});
+				});
+			});
 		}
 
 		function retrieveFromTradeRef() {
@@ -628,68 +721,6 @@
 		// Set the maximum date and time for the fromDateInput
 		var maxFromDate = new Date(currentYear, currentMonth - 1, currentDay, 15, 30).toISOString().split('.')[0];
 		document.getElementById('fromDateInput').max = maxFromDate;
-
-
-         
-		function getDatawithTradeRefAndDateRange() {
-			var keyword = document.getElementById("bridgeRequestId").value;
-			var fromDate = document.getElementById("fromDateInput").value;
-			var toDate = document.getElementById("toDateInput").value;
-
-			// Send AJAX request to the backend
-			var xhr = new XMLHttpRequest();
-			xhr.open("GET", "/data/new/findByDateAndMessageLoadData/" + encodeURIComponent(keyword) +
-				"?startDate=" + encodeURIComponent(fromDate) +
-				"&endDate=" + encodeURIComponent(toDate));
-			xhr.onreadystatechange = function () {
-				if (xhr.readyState === XMLHttpRequest.DONE) {
-					if (xhr.status === 200) {
-						var data = JSON.parse(xhr.responseText);
-						displayDataforTradeRef(data);
-					} else {
-						console.error("Error retrieving data: " + xhr.status);
-					}
-				}
-			};
-			xhr.send();
-		}
-
-		function displayDataforTradeRef(data) {
-			var container = document.getElementById("dataContainer");
-			container.innerHTML = ""; // Clear previous data
-
-			if (data.length > 0) {
-				var table = document.createElement("table");
-				table.border = "1";
-
-				// Create table header
-				var headerRow = document.createElement("tr");
-				for (var prop in data[0]) {
-					var headerCell = document.createElement("th");
-					headerCell.textContent = prop;
-					headerRow.appendChild(headerCell);
-				}
-				table.appendChild(headerRow);
-
-				// Create table rows
-				for (var i = 0; i < data.length; i++) {
-					var rowData = data[i];
-					var row = document.createElement("tr");
-
-					for (var prop in rowData) {
-						var cell = document.createElement("td");
-						cell.textContent = rowData[prop];
-						row.appendChild(cell);
-					}
-
-					table.appendChild(row);
-				}
-
-				container.appendChild(table);
-			} else {
-				container.textContent = "No data found.";
-			}
-		}
 
 
 

@@ -145,13 +145,16 @@ public class TFInterface {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@GetMapping("/new/findByDateAndMessageLoadData/{tradeReference}/{createDate}/{modifiedDate}")
+	@GetMapping("/new/findByDateAndMessageLoadData/{tradeReference}")
 	public ResponseEntity<List<RetrieveDataPage>> findByDateAndMessageLoadData(@PathVariable String tradeReference,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createDate,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime modifiedDate) {
 		List<RetrieveDataPage> data = retrieveDataService.findByDateAndMessageLoadData(createDate, modifiedDate,
 				tradeReference);
+		System.out.println("findByDateAndMessageLoadData()");
+	    System.out.println(data);
 		if (data != null && !data.isEmpty()) {
+			
 			return new ResponseEntity<>(data, HttpStatus.OK);
 		} else
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -29,7 +29,7 @@ public class RetrieveDataPage {
 	private String idUserLastModified;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "bridge_request_id")
 	private Long bridgeRequestId;
 
