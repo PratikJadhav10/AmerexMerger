@@ -45,12 +45,12 @@
 			<form>
 				<div class="form-check">
 					<input type="radio" id="tradeRefOption" class="form-check-input" name="optradio"
-						value="traderef" onclick="enableDateField()">
+						value="traderef" onclick="displayblock()">
 					<label class="form-check-label" for="tradeRefOption">Search by Traderef & date</label>
 				</div>
 				<div class="form-check">
 					<input type="radio" id="gatewayIdOption" class="form-check-input" name="optradio"
-						value="gatewayid" onclick="disableDateField()">
+						value="gatewayid" onclick="displayblock()">
 					<label class="form-check-label" for="gatewayIdOption">
 						Search by
 						Gateway ID</label>
@@ -79,12 +79,12 @@
 								disabled>
 							min="2023-05-15T00:00" max="2023-05-18T00:00"
 						</div>-->
-						<div class="input-container">
+						<div class="input-container" id="select-start-period">
 							<label for="fromDateInput">From Date and Time:</label>
 							<input type="datetime-local" id="fromDateInput" name="fromDateInput" class="datetimepicker"
 								required disabled>
 						</div>
-						<div class="input-container">
+						<div class="input-container" id="select-end-period">
 							<label for="toDateInput">To Date and Time:</label>
 							<input type="datetime-local" id="toDateInput" name="toDateInput" class="datetimepicker"
 								required disabled>

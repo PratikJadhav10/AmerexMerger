@@ -1,4 +1,27 @@
-function enableDateField() {
+function displayblock() {
+	if (document.getElementById('tradeRefOption').checked) {
+		document.getElementById('bridgeRequestId').disabled = false;
+		document.getElementById('fromDateInput').disabled = false;
+		document.getElementById('toDateInput').disabled = false;
+		document.getElementById('select-start-period').style.display = "block";
+		document.getElementById('select-end-period').style.display = "block";
+		document.getElementById('bridgeRequestId').placeholder = "Enter TradeRef";
+	}
+	else {
+		document.getElementById('bridgeRequestId').disabled = false;
+		document.getElementById('select-start-period').style.display = "none";
+		document.getElementById('select-end-period').style.display = "none";
+		document.getElementById('bridgeRequestId').placeholder = "Enter GatewayId";
+	}
+}
+
+
+
+
+
+
+
+/*function enableDateField() {
 	document.getElementById('bridgeRequestId').disabled = false;
 	//document.getElementById('flatdateInput').disabled = false;
 	document.getElementById('fromDateInput').disabled = false;
@@ -17,7 +40,7 @@ function disableDateField() {
 	document.getElementById('bridgeRequestId').disabled = false;
 	document.getElementById('bridgeRequestId').placeholder = "Enter GatewayId";
 }
-
+*/
 function retrieveXML() {
 	$(document).ready(function() {
 		$("#displayBtn").click(function() {
@@ -43,6 +66,11 @@ function retrieveXMLFromReqFileName() {
 	console.log(1);
 	//debugger;
 	var reqFileName = $("#bridgeRequestId").val();
+    var numberRegex = /^\d+$/;
+    if(!numberRegex.test(reqFileName)){
+		alert("Enter a valid input with only numbers");
+		return;
+	}
 	$.get("/data/new/reqFileName/" + reqFileName, function(data) {
 		$("#designationTextArea").val(data);
 	});
@@ -265,7 +293,7 @@ function displayDataforTradeRef(data) {
 				if (prop === "messageLoad") {
 					cell.classList.add("message-load-cell");
 					cell.setAttribute("title", cellContent);
-					cell.textContent = cellContent.length > 50 ? cellContent.substring(0, 50) + "..." : cellContent;
+					cell.textContent = cellContent;
 
 					cell.addEventListener("dblclick", function() {
 						var cellValue = this.textContent;
@@ -461,7 +489,7 @@ function retrieveFromTradeRef() {
 		// Call the fetchMessageLoad function
 		fetchMessageLoad(tradeRef, date);
 	});
-})*/
+})
 
 
 function updateXML() {
