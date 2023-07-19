@@ -63,7 +63,8 @@
 					<form>
 						<div class="form-group">
 							<label for="usr">Trade Ref or Gateway ID:</label>
-							<input type="text" class="form-control" id="bridgeRequestId" disabled>
+							<input oninput="validateInputForGatewayId()" type="text" class="form-control" id="bridgeRequestId" disabled>
+							<p id="error-message"></p>
 						</div>
 					</form>
 				</div>

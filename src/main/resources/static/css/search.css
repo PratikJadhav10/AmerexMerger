@@ -73,6 +73,9 @@ textarea {
 	white-space: normal;
 	overflow: auto;
 }
+#error-message{
+	color: red;
+}
 
 
 /* Add the necessary styling for CodeMirror: (for textarea data)

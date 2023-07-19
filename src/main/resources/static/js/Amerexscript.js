@@ -14,13 +14,6 @@ function displayblock() {
 		document.getElementById('bridgeRequestId').placeholder = "Enter GatewayId";
 	}
 }
-
-
-
-
-
-
-
 /*function enableDateField() {
 	document.getElementById('bridgeRequestId').disabled = false;
 	//document.getElementById('flatdateInput').disabled = false;
@@ -63,20 +56,26 @@ function retrieveXMLFromReqFileName() {
 			});
 		});
 	});*/
-	console.log(1);
+	console.log('retrieveXMLFromReqFileName()');
 	//debugger;
 	var reqFileName = $("#bridgeRequestId").val();
-    var numberRegex = /^\d+$/;
-    if(!numberRegex.test(reqFileName)){
-		alert("Enter a valid input with only numbers");
-		return;
-	}
 	$.get("/data/new/reqFileName/" + reqFileName, function(data) {
 		$("#designationTextArea").val(data);
 	});
 }
 
-
+function validateInputForGatewayId(){
+	var reqFileName = $("#bridgeRequestId").val();
+	var numberRegex = /^\d+$/;
+    if(!numberRegex.test(reqFileName) && gatewayIdOption.checked){
+		document.getElementById('error-message').textContent = "Enter valid input with only numbers";
+		//alert("Enter a valid input with only numbers");
+		//return;
+	}
+	else{
+		document.getElementById('error-message').textContent = "";
+	}
+}
 
 //WORKING
 function retrieveDataFromTradeRefAndDate() {
@@ -208,62 +207,7 @@ function getDatawithTradeRefAndDateRange2() {
 		});
 }
 
-//Working
-/*function displayDataforTradeRef(data) {
-	var container = document.getElementById("dataContainer");
-	container.innerHTML = ""; // Clear previous data
 
-	if (data.length > 0) {
-		var table = document.createElement("table");
-		table.classList.add("table", "table-striped");
-		//table.border = "1";
-
-		// Create table header
-		var headerRow = document.createElement("tr");
-		for (var prop in data[0]) {
-			var headerCell = document.createElement("th");
-			headerCell.textContent = prop;
-			headerRow.appendChild(headerCell);
-			var headerCell = document.createElement("th");
-			headerCell.classList.add("table-header");
-			headerCell.textContent = prop;
-			headerRow.appendChild(headerCell);
-		}
-		table.appendChild(headerRow);
-
-		// Create table rows
-		for (var i = 0; i < data.length; i++) {
-			var rowData = data[i];
-			var row = document.createElement("tr");
-
-			for (var prop in rowData) {
-				var cell = document.createElement("td");
-				var cellContent = rowData[prop];
-
-				if (prop === "messageLoad") {
-					cell.classList.add("message-load-cell");
-					cell.setAttribute("title", cellContent);
-					cell.textContent = cellContent.length > 50 ? cellContent.substring(0, 50) + "..." : cellContent;
-					cell.addEventListener("dblclick", function() {
-						this.style.whiteSpace = "normal";
-						this.style.overflow = "auto";
-					});
-				} else {
-					cell.textContent = cellContent;
-				}
-				cell.classList.add("table-cell");
-				cell.textContent = rowData[prop];
-				row.appendChild(cell);
-			}
-
-			table.appendChild(row);
-		}
-
-		container.appendChild(table);
-	} else {
-		container.textContent = "No data found.";
-	}
-}*/
 function displayDataforTradeRef(data) {
 	var container = document.getElementById("dataContainer");
 	container.innerHTML = ""; // Clear previous data
@@ -335,6 +279,63 @@ function displayDataforTradeRef(data) {
 		container.textContent = "No data found.";
 	}
 }
+
+//Working not in use
+/*function displayDataforTradeRef(data) {
+	var container = document.getElementById("dataContainer");
+	container.innerHTML = ""; // Clear previous data
+
+	if (data.length > 0) {
+		var table = document.createElement("table");
+		table.classList.add("table", "table-striped");
+		//table.border = "1";
+
+		// Create table header
+		var headerRow = document.createElement("tr");
+		for (var prop in data[0]) {
+			var headerCell = document.createElement("th");
+			headerCell.textContent = prop;
+			headerRow.appendChild(headerCell);
+			var headerCell = document.createElement("th");
+			headerCell.classList.add("table-header");
+			headerCell.textContent = prop;
+			headerRow.appendChild(headerCell);
+		}
+		table.appendChild(headerRow);
+
+		// Create table rows
+		for (var i = 0; i < data.length; i++) {
+			var rowData = data[i];
+			var row = document.createElement("tr");
+
+			for (var prop in rowData) {
+				var cell = document.createElement("td");
+				var cellContent = rowData[prop];
+
+				if (prop === "messageLoad") {
+					cell.classList.add("message-load-cell");
+					cell.setAttribute("title", cellContent);
+					cell.textContent = cellContent.length > 50 ? cellContent.substring(0, 50) + "..." : cellContent;
+					cell.addEventListener("dblclick", function() {
+						this.style.whiteSpace = "normal";
+						this.style.overflow = "auto";
+					});
+				} else {
+					cell.textContent = cellContent;
+				}
+				cell.classList.add("table-cell");
+				cell.textContent = rowData[prop];
+				row.appendChild(cell);
+			}
+
+			table.appendChild(row);
+		}
+
+		container.appendChild(table);
+	} else {
+		container.textContent = "No data found.";
+	}
+}*/
 
 //WORKING(NOT IS USE)
 function postData() {
