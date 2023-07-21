@@ -34,6 +34,21 @@ function disableDateField() {
 	document.getElementById('bridgeRequestId').placeholder = "Enter GatewayId";
 }
 */
+
+/*function initializeCodeMirror() {
+	//debugger;
+	var textarea = document.getElementById("designationTextArea");
+	var codeMirrorInstance = CodeMirror.fromTextArea(textarea, {
+		lineNumbers: true, // Show line numbers
+		//matchBrackets: true,
+		mode: "xml", // Set the mode to XML or the appropriate language you need
+		theme: "default",
+		//lineSeparator: "\n" // Set the theme to "default" or any other theme you prefer
+	});
+
+	return codeMirrorInstance;
+}
+*/
 function retrieveXML() {
 	$(document).ready(function() {
 		$("#displayBtn").click(function() {
@@ -60,19 +75,22 @@ function retrieveXMLFromReqFileName() {
 	//debugger;
 	var reqFileName = $("#bridgeRequestId").val();
 	$.get("/data/new/reqFileName/" + reqFileName, function(data) {
-		$("#designationTextArea").val(data);
+		var parsedData = parseNewlinesAndTabs(data);
+		console.log(data);
+		initializeCodeMirror();
+		$("#designationTextArea").val(parsedData);
 	});
 }
 
-function validateInputForGatewayId(){
+function validateInputForGatewayId() {
 	var reqFileName = $("#bridgeRequestId").val();
 	var numberRegex = /^\d+$/;
-    if(!numberRegex.test(reqFileName) && gatewayIdOption.checked){
+	if (!numberRegex.test(reqFileName) && gatewayIdOption.checked) {
 		document.getElementById('error-message').textContent = "Enter valid input with only numbers";
 		//alert("Enter a valid input with only numbers");
 		//return;
 	}
-	else{
+	else {
 		document.getElementById('error-message').textContent = "";
 	}
 }
@@ -157,7 +175,7 @@ function updateXmlDataFromReqFileName() {
 					"Content-Type": "application/json",
 					"X-CSRF-Token": csrfToken
 				},
-				body: JSON.stringify(requestBody.updatedData)
+				body: requestBody.updatedData
 			})
 				.then(function(response) {
 					// Handle the response
@@ -207,6 +225,17 @@ function getDatawithTradeRefAndDateRange2() {
 		});
 }
 
+// Function to replace \n and \t with their representations
+function parseNewlinesAndTabs(input) {
+	// Replace \n with a newline character (line break)
+	var parsedInput = input.replace(/\\n/g, "\n");
+
+	// Replace \t with a tab character
+	parsedInput = parsedInput.replace(/\\t/g, "\t");
+
+	return parsedInput;
+}
+
 
 function displayDataforTradeRef(data) {
 	var container = document.getElementById("dataContainer");
@@ -241,31 +270,9 @@ function displayDataforTradeRef(data) {
 
 					cell.addEventListener("dblclick", function() {
 						var cellValue = this.textContent;
-						this.textContent = ""; // Clear the current content
-
-						var input = document.createElement("input");
-						input.value = cellValue;
-						this.appendChild(input);
-
-						// When the user finishes editing the input field
-						input.addEventListener("blur", function() {
-							var newValue = this.value;
-							this.parentElement.textContent = newValue;
-							// Update the data array with the new value
-							var rowIndex = this.parentElement.parentElement.rowIndex - 1; // -1 because of the header row
-							var cellIndex = this.parentElement.cellIndex;
-							data[rowIndex][Object.keys(data[rowIndex])[cellIndex]] = newValue;
-						});
-
-						// If the user presses Enter key, simulate blur event to update the cell
-						input.addEventListener("keyup", function(event) {
-							if (event.key === "Enter") {
-								this.blur();
-							}
-						});
-
-						// Set focus on the input field
-						input.focus();
+						var textarea = document.getElementById("designationTextArea");
+						textarea.value = parseNewlinesAndTabs(cellValue); // Set the textarea content to the cell value
+						//	textarea.dataset.line = countLines(cellValue); // Update line numbers
 					});
 				} else {
 					cell.textContent = cellContent;
@@ -279,6 +286,7 @@ function displayDataforTradeRef(data) {
 		container.textContent = "No data found.";
 	}
 }
+
 
 //Working not in use
 /*function displayDataforTradeRef(data) {

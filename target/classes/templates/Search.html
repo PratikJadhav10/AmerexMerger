@@ -22,7 +22,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/xml/xml.min.js"></script>
-	<script src="/js/Amerexscript.js"></script>
+	<script src="/js/Amerexscript.js" defer></script>
 
 
 	<link rel="stylesheet" type="text/css" href="/css/search.css">
@@ -44,13 +44,13 @@
 		<div class="container">
 			<form>
 				<div class="form-check">
-					<input type="radio" id="tradeRefOption" class="form-check-input" name="optradio"
-						value="traderef" onclick="displayblock()">
+					<input type="radio" id="tradeRefOption" class="form-check-input" name="optradio" value="traderef"
+						onclick="displayblock()">
 					<label class="form-check-label" for="tradeRefOption">Search by Traderef & date</label>
 				</div>
 				<div class="form-check">
-					<input type="radio" id="gatewayIdOption" class="form-check-input" name="optradio"
-						value="gatewayid" onclick="displayblock()">
+					<input type="radio" id="gatewayIdOption" class="form-check-input" name="optradio" value="gatewayid"
+						onclick="displayblock()">
 					<label class="form-check-label" for="gatewayIdOption">
 						Search by
 						Gateway ID</label>
@@ -63,7 +63,8 @@
 					<form>
 						<div class="form-group">
 							<label for="usr">Trade Ref or Gateway ID:</label>
-							<input oninput="validateInputForGatewayId()" type="text" class="form-control" id="bridgeRequestId" disabled>
+							<input oninput="validateInputForGatewayId()" type="text" class="form-control"
+								id="bridgeRequestId" disabled>
 							<p id="error-message"></p>
 						</div>
 					</form>
@@ -201,6 +202,20 @@
 		</div>
 		<br>
 	</form>
+	<script>
+		function initializeCodeMirror() {
+			var textarea = document.getElementById("designationTextArea");
+			var codeMirrorInstance = CodeMirror.fromTextArea(textarea, {
+				lineNumbers: true,
+				mode: "xml",
+				theme: "default",
+			});
+			return codeMirrorInstance;
+		}
+		/*document.addEventListener("DOMContentLoaded", function () {
+			initializeCodeMirror();
+		});*/
+	</script>
 </body>
 
 </html>

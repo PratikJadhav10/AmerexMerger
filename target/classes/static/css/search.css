@@ -73,8 +73,24 @@ textarea {
 	white-space: normal;
 	overflow: auto;
 }
-#error-message{
+
+#error-message {
 	color: red;
+}
+
+button::after {
+	content: "";
+	display: block;
+	height: 2px;
+	width: 100%;
+	background-color: white;
+	transform: scale(0);
+	transform-origin: left;
+	transition: transform 0.3s ease;
+}
+
+button:hover::after {
+	transform: scaleX(1);
 }
 
 
