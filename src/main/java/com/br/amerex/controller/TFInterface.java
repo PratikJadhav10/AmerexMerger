@@ -152,15 +152,15 @@ public class TFInterface {
 		List<RetrieveDataPage> data = retrieveDataService.findByDateAndMessageLoadData(createDate, modifiedDate,
 				tradeReference);
 		System.out.println("findByDateAndMessageLoadData()");
-	    System.out.println(data);
+		System.out.println(data);
 		if (data != null && !data.isEmpty()) {
-			
+
 			return new ResponseEntity<>(data, HttpStatus.OK);
 		} else
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 	}
-	
+
 	@PutMapping("/new/update/messageload")
 	public String updateXml(@RequestParam Long bridgeRequestId, @RequestBody String updatedData)
 			throws NoSuchBridgeIdException {
@@ -177,6 +177,7 @@ public class TFInterface {
 	@PutMapping("/new/update/reqFileName/{reqFileName}")
 	public String getXmlDataFromReqFileName(@PathVariable String reqFileName, @RequestBody String updatedData)
 			throws NoSuchBridgeIdException {
+		System.out.println("reqFileName:" + reqFileName);
 		System.out.println("getXmlDataFromReqFileName ()");
 		RetrieveDataPage retrieveData = retrieveRepo.findByReqFileName(reqFileName);
 		retrieveData.setMessageLoad(updatedData);
@@ -184,6 +185,17 @@ public class TFInterface {
 
 		return "Data updated successfully";
 
+	}
+
+	@PutMapping("/new/update/tradeRefAndDate")
+	public String updateXmlDataFromTradeRefAndDate(@PathVariable String tradeReference,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createDate,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime modifiedDate,
+			@RequestBody String updatedData) throws NoSuchBridgeIdException {
+		System.out.println("updateXmlDataFromTradeRefAndDate()");
+		List<RetrieveDataPage> retrieveData = retrieveRepo.findByDateAndMessageLoadData(createDate, modifiedDate,
+				tradeReference);
+		return null;
 	}
 
 	@PostMapping("/new/updateData")

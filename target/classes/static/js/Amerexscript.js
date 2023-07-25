@@ -77,7 +77,7 @@ function retrieveXMLFromReqFileName() {
 	$.get("/data/new/reqFileName/" + reqFileName, function(data) {
 		var parsedData = parseNewlinesAndTabs(data);
 		console.log(data);
-		initializeCodeMirror();
+		//	initializeCodeMirror();
 		$("#designationTextArea").val(parsedData);
 	});
 }
@@ -140,6 +140,18 @@ function handleretrieve() {
 		getDatawithTradeRefAndDateRange2(bridgeRequestId);
 	} else if (gatewayIdOption.checked) {
 		retrieveXMLFromReqFileName(bridgeRequestId);
+	}
+}
+
+function handleupdatedData() {
+	var tradeRefOption = document.getElementById("tradeRefOption");
+	var gatewayIdOption = document.getElementById("gatewayIdOption");
+	//var bridgeRequestId = document.getElementById("bridgeRequestId").value.trim();
+
+	if (tradeRefOption.checked) {
+		updateXmlDataFromTradeRefAndDate();
+	} else if (gatewayIdOption.checked) {
+		updateXmlDataFromReqFileName();
 	}
 }
 
@@ -236,7 +248,7 @@ function parseNewlinesAndTabs(input) {
 	return parsedInput;
 }
 
-
+var selectedReqFileName = null;
 function displayDataforTradeRef(data) {
 	var container = document.getElementById("dataContainer");
 	container.innerHTML = ""; // Clear previous data
@@ -258,6 +270,9 @@ function displayDataforTradeRef(data) {
 		for (var i = 0; i < data.length; i++) {
 			var rowData = data[i];
 			var row = document.createElement("tr");
+			row.setAttribute("data-reqFileName", rowData.reqFileName); // Set the reqFileName as a data attribute
+			row.setAttribute("data-messageLoad", rowData.messageLoad); // Set the messageLoad as a data attribute
+
 
 			for (var prop in rowData) {
 				var cell = document.createElement("td");
@@ -273,6 +288,11 @@ function displayDataforTradeRef(data) {
 						var textarea = document.getElementById("designationTextArea");
 						textarea.value = parseNewlinesAndTabs(cellValue); // Set the textarea content to the cell value
 						//	textarea.dataset.line = countLines(cellValue); // Update line numbers
+						var reqFileName = this.parentNode.getAttribute("data-reqFileName");
+						var messageLoad = this.parentNode.getAttribute("data-messageLoad");
+						console.log("reqFileName:", reqFileName);
+						console.log("messageLoad:", messageLoad);
+						selectedReqFileName = reqFileName;
 					});
 				} else {
 					cell.textContent = cellContent;
@@ -287,7 +307,67 @@ function displayDataforTradeRef(data) {
 	}
 }
 
+function updateXmlDataFromTradeRefAndDate() {
+	console.log("Function executing properly");
+	//debugger;
+	// Check if a reqFileName is selected
+	if (selectedReqFileName === null) {
+		console.error("No reqFileName selected.");
+		return;
+	}
+	console.log("SelectedReqFileNamee:" + selectedReqFileName);
+	// Retrieve the updated data from the textarea
+	var updatedData = $("#designationTextArea").val();
 
+	// Fetch the CSRF token
+	fetch("/api/amerex/csrf-token")
+		.then(function(response) {
+			if (response.ok) {
+				return response.text();
+			} else {
+				throw new Error("Error retrieving CSRF token: " + response.status);
+			}
+		})
+		.then(function(csrfToken) {
+			// Prepare the data to be sent in the request body
+			var requestBody = {
+				updatedData: updatedData
+			};	
+
+			// Send the AJAX request with the CSRF token
+			fetch(`/data/new/update/reqFileName/${selectedReqFileName}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					"X-CSRF-Token": csrfToken
+				},
+				body: requestBody.updatedData
+			})
+				.then(function(response) {
+					// Handle the response
+					if (response.ok) {
+						return response.text();
+					} else {
+						throw new Error("Error updating data: " + response.status);
+					}
+				})
+				.then(function(responseText) {
+					console.log("Successful");
+					// Display a success message or perform any other actions
+					console.log(responseText);
+				})
+				.catch(function(error) {
+					// Handle any errors that occurred during the request
+					console.log("Failed");
+					console.error(error);
+				});
+		})
+		.catch(function(error) {
+			// Handle any errors that occurred during the CSRF token retrieval
+			console.error(error);
+		});
+
+}
 //Working not in use
 /*function displayDataforTradeRef(data) {
 	var container = document.getElementById("dataContainer");
@@ -346,7 +426,7 @@ function displayDataforTradeRef(data) {
 }*/
 
 //WORKING(NOT IS USE)
-function postData() {
+function postDataForBridgeRequesatID() {
 	// Retrieve the updated data from the textarea
 	var bridgeRequestId = $("#bridgeRequestId").val();
 	var updatedData = $("#designationTextArea").val();
