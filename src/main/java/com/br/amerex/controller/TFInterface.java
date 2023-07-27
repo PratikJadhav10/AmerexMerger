@@ -147,11 +147,13 @@ public class TFInterface {
 
 	@GetMapping("/new/findByDateAndMessageLoadData/{tradeReference}")
 	public ResponseEntity<List<RetrieveDataPage>> findByDateAndMessageLoadData(@PathVariable String tradeReference,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createDate,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime modifiedDate) {
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime createDate,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime modifiedDate) {
 		List<RetrieveDataPage> data = retrieveDataService.findByDateAndMessageLoadData(createDate, modifiedDate,
 				tradeReference);
 		System.out.println("findByDateAndMessageLoadData()");
+		System.out.println("createdate backend:" + createDate);
+		System.out.println("Modified backend:" + modifiedDate);
 		System.out.println(data);
 		if (data != null && !data.isEmpty()) {
 

@@ -6,6 +6,8 @@ function displayblock() {
 		document.getElementById('select-start-period').style.display = "block";
 		document.getElementById('select-end-period').style.display = "block";
 		document.getElementById('bridgeRequestId').placeholder = "Enter TradeRef";
+		document.getElementById('fromDateInput').placeholder = "Select date";
+		document.getElementById('toDateInput').placeholder = "Select date";
 	}
 	else {
 		document.getElementById('bridgeRequestId').disabled = false;
@@ -217,18 +219,20 @@ function updateXmlDataFromReqFileName() {
 function getDatawithTradeRefAndDateRange2() {
 	var tradeRef = document.getElementById("bridgeRequestId").value;
 	console.log("TradeRef:" + tradeRef);
-	var fromDate = new Date($("#fromDateInput").val());
-	var toDate = new Date($("#toDateInput").val());
+	var fromDate = document.getElementById("fromDateInput").value;
+	var toDate = document.getElementById("toDateInput").value;
+	/*var fromDate = new Date($("#fromDateInput").val());
+	var toDate = new Date($("#toDateInput").val());*/
 	console.log("fromDate:" + fromDate);
 	console.log("toDate:" + toDate);
 
 	// Format the date in the desired format expected by the backend
-	var formattedfromDate = fromDate.toISOString();
+	/*var formattedfromDate = fromDate.toISOString();
 	var formattedtoDate = toDate.toISOString();
 	console.log("formattedfromDate:" + formattedfromDate);
-	console.log("formattedtoDate:" + formattedtoDate);
+	console.log("formattedtoDate:" + formattedtoDate);*/
 
-	$.get("/data/new/findByDateAndMessageLoadData/" + tradeRef, { createDate: formattedfromDate, modifiedDate: formattedtoDate })
+	$.get("/data/new/findByDateAndMessageLoadData/" + tradeRef, { createDate: fromDate, modifiedDate: toDate })
 		.done(function(data) {
 			displayDataforTradeRef(data);
 		})
@@ -332,7 +336,7 @@ function updateXmlDataFromTradeRefAndDate() {
 			// Prepare the data to be sent in the request body
 			var requestBody = {
 				updatedData: updatedData
-			};	
+			};
 
 			// Send the AJAX request with the CSRF token
 			fetch(`/data/new/update/reqFileName/${selectedReqFileName}`, {
@@ -554,13 +558,18 @@ function retrieveFromTradeRef() {
 	});
 }
 
+const currentDate = new Date();
 
+const minDate = new Date(currentDate);
+minDate.setDate(minDate.getDate() - 1);
 
-/*flatpickr(".datetimepicker", {
+flatpickr(".datetimepicker", {
 	enableTime: true, // Enable time selection
 	dateFormat: "Y-m-d H:i", // Format of the selected date and time
+	minDate: minDate,
+	maxDate: currentDate,
 });
-*/
+
 
 
 /*$(document).ready(function() {
