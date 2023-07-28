@@ -78,9 +78,12 @@ function retrieveXMLFromReqFileName() {
 	var reqFileName = $("#bridgeRequestId").val();
 	$.get("/data/new/reqFileName/" + reqFileName, function(data) {
 		var parsedData = parseNewlinesAndTabs(data);
+		//initializeCodeMirror();
 		console.log(data);
 		//	initializeCodeMirror();
-		$("#designationTextArea").val(parsedData);
+		codeMirrorInstance.setValue(parsedData);
+		//$("#designationTextArea").val(parsedData);
+		//initializeCodeMirror();
 	});
 }
 
@@ -162,7 +165,8 @@ function updateXmlDataFromReqFileName() {
 	//debugger;
 	// Retrieve the updated data from the textarea
 	var reqFileName = $("#bridgeRequestId").val();
-	var updatedData = $("#designationTextArea").val();
+	var updatedData = codeMirrorInstance.getValue();
+	//var updatedData = $("#designationTextArea").val();
 	//var updatedData = document.getElementById("designationTextArea").value;
 	//var bridgeRequestId = document.getElementById("bridgeRequestId").value;
 
@@ -289,9 +293,11 @@ function displayDataforTradeRef(data) {
 
 					cell.addEventListener("dblclick", function() {
 						var cellValue = this.textContent;
+						
 						var textarea = document.getElementById("designationTextArea");
 						textarea.value = parseNewlinesAndTabs(cellValue); // Set the textarea content to the cell value
 						//	textarea.dataset.line = countLines(cellValue); // Update line numbers
+					//	codeMirrorInstance.setValue(textarea);
 						var reqFileName = this.parentNode.getAttribute("data-reqFileName");
 						var messageLoad = this.parentNode.getAttribute("data-messageLoad");
 						console.log("reqFileName:", reqFileName);
@@ -321,7 +327,8 @@ function updateXmlDataFromTradeRefAndDate() {
 	}
 	console.log("SelectedReqFileNamee:" + selectedReqFileName);
 	// Retrieve the updated data from the textarea
-	var updatedData = $("#designationTextArea").val();
+	var updatedData = codeMirrorInstance.getValue();
+	//var updatedData = $("#designationTextArea").val();
 
 	// Fetch the CSRF token
 	fetch("/api/amerex/csrf-token")

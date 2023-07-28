@@ -29,9 +29,6 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 
-
-
-
 </head>
 
 <body>
@@ -138,8 +135,8 @@
 		<div class="container">
 			<form>
 				<div>
-					<label for="comment"></label>
-					<textarea rows="8" id="designationTextArea"></textarea>
+					<label for="comment">Xml Code:</label>
+					<textarea rows="8" id="designationTextArea" class="code-editor"></textarea>
 				</div>
 			</form>
 		</div>
@@ -205,7 +202,8 @@
 		</div>
 		<br>
 	</form>
-	<!--<script>
+	<script>
+		var codeMirrorInstance = initializeCodeMirror();
 		function initializeCodeMirror() {
 			var textarea = document.getElementById("designationTextArea");
 			var codeMirrorInstance = CodeMirror.fromTextArea(textarea, {
@@ -215,10 +213,10 @@
 			});
 			return codeMirrorInstance;
 		}
-		/*document.addEventListener("DOMContentLoaded", function () {
-			initializeCodeMirror();
-		});*/
-	</script>-->
+		//document.addEventListener("DOMContentLoaded", function () {
+			//initializeCodeMirror();
+		//});
+	</script>
 </body>
 
 </html>
