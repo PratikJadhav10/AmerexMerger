@@ -93,6 +93,42 @@ button:hover::after {
 	transform: scaleX(1);
 }
 
+/* Custom styles for the table */
+table {
+	width: 100%;
+	border-collapse: collapse;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+th,
+td {
+	padding: 10px;
+	text-align: left;
+}
+
+th {
+	background-color: rgb(192, 192, 192);
+	font-weight: bold;
+	color: #333;
+}
+
+tr:nth-child(even) {
+	background-color: #f9f9f9;
+}
+
+/* Hover effect on table rows */
+tr:hover {
+	background-color: rgb(192, 192, 192);
+}
+
+#dataContainer {
+	max-height: 300px;
+	/* Adjust this value as needed to control the maximum height of the table */
+	overflow-y: auto;
+}
+
+/* Custom font from Google Fonts (replace with your preferred font) */
+
 
 /* Add the necessary styling for CodeMirror: (for textarea data)
 		.code-editor .CodeMirror {

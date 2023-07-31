@@ -264,12 +264,28 @@ function displayDataforTradeRef(data) {
 	if (data.length > 0) {
 		var table = document.createElement("table");
 		table.classList.add("table", "table-striped");
+		
+		//custom header name
+		var customHeaders = {
+			idUserCreate: "User Create",
+			idUserLastModified: "User Modified",
+			bridgeRequestId: "BridgeRequestId",
+			dt_modified: "Date Modified",
+			date: "Date Created",
+			recordVersion: "Record Version",
+			messageLoad: "XML Data",
+			tradeRef: "Trade Ref",
+			sourceSystem: "Source System",
+			messageStatus: "Status",
+			reqFileName: "ReqFile Name",
+			recordCount: "Record Count",
+		};
 
 		// Create table header
 		var headerRow = document.createElement("tr");
 		for (var prop in data[0]) {
 			var headerCell = document.createElement("th");
-			headerCell.textContent = prop;
+			headerCell.textContent = customHeaders[prop] || prop ;
 			headerRow.appendChild(headerCell);
 		}
 		table.appendChild(headerRow);
@@ -292,12 +308,15 @@ function displayDataforTradeRef(data) {
 					cell.textContent = cellContent;
 
 					cell.addEventListener("dblclick", function() {
+						//debugger;
 						var cellValue = this.textContent;
 						
 						var textarea = document.getElementById("designationTextArea");
-						textarea.value = parseNewlinesAndTabs(cellValue); // Set the textarea content to the cell value
+						var parsedData = parseNewlinesAndTabs(cellValue);
+						//textarea.value = parseNewlinesAndTabs(cellValue); // Set the textarea content to the cell value
 						//	textarea.dataset.line = countLines(cellValue); // Update line numbers
-					//	codeMirrorInstance.setValue(textarea);
+						codeMirrorInstance.setValue(parsedData);
+					//	console.log(codeMirrorInstance);
 						var reqFileName = this.parentNode.getAttribute("data-reqFileName");
 						var messageLoad = this.parentNode.getAttribute("data-messageLoad");
 						console.log("reqFileName:", reqFileName);
