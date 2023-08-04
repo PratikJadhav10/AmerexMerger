@@ -127,6 +127,11 @@ tr:hover {
 	overflow-y: auto;
 }
 
+#designationTextArea1 {
+	width: 100%;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
 /* Custom font from Google Fonts (replace with your preferred font) */
 
 

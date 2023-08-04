@@ -87,7 +87,7 @@ function retrieveXMLFromReqFileName() {
 	});
 }
 
-function validateInputForGatewayId() {
+/*function validateInputForGatewayId() {
 	var reqFileName = $("#bridgeRequestId").val();
 	var numberRegex = /^\d+$/;
 	if (!numberRegex.test(reqFileName) && gatewayIdOption.checked) {
@@ -98,7 +98,7 @@ function validateInputForGatewayId() {
 	else {
 		document.getElementById('error-message').textContent = "";
 	}
-}
+}*/
 
 //WORKING
 function retrieveDataFromTradeRefAndDate() {
@@ -160,8 +160,30 @@ function handleupdatedData() {
 	}
 }
 
+//XML validation
+function validateXmlData(xmlString) {
+	try {
+		const parser = new DOMParser();
+		const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+		if (xmlDoc.getElementsByTagName("parsererror").length === 0) {
+			return true; // XML is valid
+		} else {
+			return false; // XML is not valid
+		}
+	} catch (error) {
+		return false; // Parsing error, XML is not valid
+	}
+}
+
 //WORKING
 function updateXmlDataFromReqFileName() {
+	var xmlData = codeMirrorInstance.getValue();
+
+	// Validate XML data
+	/*if (!validateXmlData(xmlData)) {
+		alert("Invalid XML data. Please correct the XML and try again.");
+		return;
+	}*/
 	//debugger;
 	// Retrieve the updated data from the textarea
 	var reqFileName = $("#bridgeRequestId").val();
@@ -264,7 +286,7 @@ function displayDataforTradeRef(data) {
 	if (data.length > 0) {
 		var table = document.createElement("table");
 		table.classList.add("table", "table-striped");
-		
+
 		//custom header name
 		var customHeaders = {
 			idUserCreate: "User Create",
@@ -285,7 +307,7 @@ function displayDataforTradeRef(data) {
 		var headerRow = document.createElement("tr");
 		for (var prop in data[0]) {
 			var headerCell = document.createElement("th");
-			headerCell.textContent = customHeaders[prop] || prop ;
+			headerCell.textContent = customHeaders[prop] || prop;
 			headerRow.appendChild(headerCell);
 		}
 		table.appendChild(headerRow);
@@ -310,13 +332,13 @@ function displayDataforTradeRef(data) {
 					cell.addEventListener("dblclick", function() {
 						//debugger;
 						var cellValue = this.textContent;
-						
+
 						var textarea = document.getElementById("designationTextArea");
 						var parsedData = parseNewlinesAndTabs(cellValue);
 						//textarea.value = parseNewlinesAndTabs(cellValue); // Set the textarea content to the cell value
 						//	textarea.dataset.line = countLines(cellValue); // Update line numbers
 						codeMirrorInstance.setValue(parsedData);
-					//	console.log(codeMirrorInstance);
+						//	console.log(codeMirrorInstance);
 						var reqFileName = this.parentNode.getAttribute("data-reqFileName");
 						var messageLoad = this.parentNode.getAttribute("data-messageLoad");
 						console.log("reqFileName:", reqFileName);
